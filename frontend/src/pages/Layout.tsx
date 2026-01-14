@@ -119,7 +119,7 @@ const Layout = () => {
 
                 {/* Réseaux sociaux */}
                 <div className="absolute bottom-4 w-full hidden md:flex justify-center space-x-6 text-xl drop-shadow-md">
-                  <SocialIcons option="desktop" />
+                  <SocialIcons />
                 </div>
               </motion.div>
             </div>
@@ -138,7 +138,7 @@ const Layout = () => {
         >
           {/* Réseaux sociaux */}
           <div className="w-full flex justify-center space-x-6 text-white text-xl drop-shadow-md mb-4">
-            <SocialIcons option="mobile" />
+            <SocialIcons />
           </div>
         </motion.div>
       </div>

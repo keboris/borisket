@@ -3,7 +3,7 @@ import { FaFacebookF, FaInstagram } from "react-icons/fa6";
 import { useTheme } from "../../contexts";
 import { useEffect, useState } from "react";
 
-const SocialIcons = ({ option }: { option: string }) => {
+const SocialIcons = () => {
   const { theme } = useTheme();
 
   function useIsDesktop() {

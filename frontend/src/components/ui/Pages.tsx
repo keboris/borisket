@@ -16,7 +16,7 @@ const Pages = () => {
     pathname: string;
   }>();
   const navigate = useNavigate();
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [songs, setSongs] = useState<SongProps[]>([]);
   const [page, setPage] = useState(1);

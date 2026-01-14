@@ -1,9 +1,9 @@
-import { Navigate, Outlet, useLocation } from "react-router";
+import { Outlet } from "react-router";
 /*import { useAuth } from "../contexts";
 import { Loading } from "../components";*/
 
 const ProtectedLayout = () => {
-  const location = useLocation();
+  //const location = useLocation();
 
   /*const { isAuthenticated, loading } = useAuth();
 

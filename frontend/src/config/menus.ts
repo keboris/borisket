@@ -13,7 +13,6 @@ import {
   Mail,
   Info,
   Laptop,
-  Settings,
   Calendar,
   ShoppingCart,
   Gift,
