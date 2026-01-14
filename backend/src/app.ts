@@ -19,6 +19,7 @@ const port = process.env.PORT || 8080;
 app.use(
   cors({
     origin: [
+      "https://borisket.vercel.app/",
       "https://borisket.com",
       "https://www.borisket.com",
       "http://localhost:5173",

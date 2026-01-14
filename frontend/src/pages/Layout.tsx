@@ -89,10 +89,10 @@ const Layout = () => {
       <div className="max-w-7xl mx-auto pt-24 md:pt-28 px-6 grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* LEFT */}
         <div className="flex flex-col gap-2">
-          <p className="text-3xl md:text-5xl font-bold text-center md:text-left">
+          <p className="hidden md:block md:text-5xl font-bold text-center md:text-left">
             {hour}
           </p>
-          <p className="opacity-70 capitalize text-center md:text-left">
+          <p className="hidden md:block opacity-70 capitalize text-center md:text-left">
             {date}
           </p>
 
