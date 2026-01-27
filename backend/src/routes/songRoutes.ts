@@ -8,6 +8,7 @@ import {
   getAlbums,
   getClips,
   getLyrics,
+  getSongBySlug,
 } from "#controllers";
 import { authenticate, authorize } from "#middlewares";
 import { Song } from "#models";
@@ -32,7 +33,10 @@ songRoutes.delete("/:id", authenticate, authorize(Song), deleteSong);
 songRoutes.post("/", createSong);
 
 songRoutes.get("/:id", getSongById);
+
 songRoutes.put("/:id", updateSong);
 songRoutes.delete("/:id", deleteSong);
+
+songRoutes.get("/slug/:slug", getSongBySlug);
 
 export default songRoutes;

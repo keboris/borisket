@@ -164,6 +164,22 @@ export const getSongById: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getSongBySlug: RequestHandler = async (req, res, next) => {
+  try {
+    const song = await Song.findOne({ slug: req.params.slug }).exec();
+    if (!song) {
+      return res.status(404).json({ message: "Song not found" });
+    }
+    res.status(200).json(song);
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(500).json({ message: error.message });
+    } else {
+      return res.status(500).json({ message: "Unknown server error" });
+    }
+  }
+};
+
 export const updateSong: RequestHandler = async (req, res, next) => {
   try {
     const updatedSong = await Song.findByIdAndUpdate(req.params.id, req.body, {
