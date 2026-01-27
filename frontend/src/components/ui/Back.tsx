@@ -12,23 +12,23 @@ const Back = () => {
       whileHover={{ scale: 1.07 }}
       onClick={() => navigate(-1)}
       className="
-                  group relative
-                  bg-base-100 rounded-2xl
-                  flex flex-col items-center justify-center
-                  p-4 text-center
-                  cursor-pointer
-                  transition-all duration-300
-                  shadow-md hover:shadow-2xl shadow-gray-500/40
-                  font-medium hover:font-bold
-                "
+        group relative
+        bg-base-100 rounded-2xl
+        flex flex-col items-center justify-center
+        p-4 text-center
+        cursor-pointer
+        transition-all duration-300
+        shadow-md hover:shadow-2xl shadow-gray-500/40
+        font-medium hover:font-bold
+      "
     >
       {/* HALO */}
       <div
         className="
-                    absolute inset-0 rounded-2xl
-                    opacity-0 group-hover:opacity-100
-                    transition duration-300
-                    blur-xl shadow-gray-500/40"
+          absolute inset-0 rounded-2xl
+          opacity-0 group-hover:opacity-100
+          transition duration-300
+          blur-xl shadow-gray-500/40"
       />
 
       {/* ICON */}
@@ -37,7 +37,17 @@ const Back = () => {
       </div>
 
       {/* LABEL */}
-      <span className="text-sm relative z-10">{t("back")}</span>
+      <span
+        className="text-xs sm:text-sm
+          whitespace-nowrap
+          overflow-hidden
+          text-ellipsis
+          relative z-10
+          max-w-full
+        "
+      >
+        {t("back")}
+      </span>
     </motion.button>
   );
 };

@@ -10,3 +10,4 @@ export { default as Pages } from "./ui/Pages.tsx";
 export { default as Music } from "./ui/Music.tsx";
 export { default as Loading } from "./ui/Loading.tsx";
 export { default as Back } from "./ui/Back.tsx";
+export { default as Single } from "./ui/Single.tsx";

@@ -101,6 +101,7 @@ export type SongProps = {
   artist: string;
   feat?: string;
   coverImage: string;
+  slug?: string;
   releaseDate: Date;
   genres: string[];
   type: "single" | "album" | "ep";
@@ -119,6 +120,8 @@ export type SongProps = {
     spotify?: string;
     apple?: string;
     youtube?: string;
+    deezer?: string;
+    other?: string;
   };
   inPlaylist: boolean;
   buyLink: string;

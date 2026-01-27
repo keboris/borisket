@@ -87,6 +87,15 @@ const Pages = () => {
 
   /* Pages mobile */
   const mobilePages = useMemo(() => chunk(songs, PER_PAGE_MOBILE), [songs]);
+
+  const glowColors = [
+    "shadow-purple-500/50",
+    "shadow-yellow-400/50",
+    "shadow-pink-500/50",
+    "shadow-blue-500/50",
+    "shadow-emerald-500/50",
+  ];
+
   console.log("Pathname in Pages component:", pathname);
   return (
     <>
@@ -135,7 +144,16 @@ const Pages = () => {
               </div>
 
               {/* LABEL */}
-              <span className="text-sm relative z-10">
+              <span
+                className="
+                  text-xs sm:text-sm
+                  whitespace-nowrap
+                  overflow-hidden
+                  text-ellipsis
+                  relative z-10
+                  max-w-full
+                "
+              >
                 {item.name[language] ?? item.name.fr}
               </span>
             </motion.button>
@@ -158,49 +176,62 @@ const Pages = () => {
               <>
                 {/* ================= DESKTOP ================= */}
                 <div className="hidden md:grid grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
-                  {desktopTracks.map((track) => (
-                    <motion.div
-                      key={track._id}
-                      whileTap={{ scale: 0.95 }}
-                      whileHover={{ scale: 1.07 }}
-                      onClick={() =>
-                        navigate(
-                          `/music/${pathname.split("/")[2]}/${track._id}`
-                        )
-                      }
-                      className={`
-                  group relative
-                  bg-base-100 rounded-2xl
-                  flex flex-col items-center justify-center
-                  p-4 text-center
-                  cursor-pointer
-                  transition-all duration-300
-                  shadow-md hover:shadow-2xl shadow-gray-500/40
-                  font-medium hover:font-bold
-                `}
-                    >
-                      {/* HALO */}
-                      <div
-                        className="
-                    absolute inset-0 rounded-2xl
-                    opacity-0 group-hover:opacity-100
-                    transition duration-300
-                    blur-xl shadow-gray-500/40"
-                      />
-                      {/* ICON */}
-                      <div className="w-20 h-20 mb-2 relative z-10">
-                        <img
-                          src={track.coverImage}
-                          alt={track.title}
-                          className="w-full h-full object-cover rounded-lg"
+                  {desktopTracks.map((track, index) => {
+                    const glow = glowColors[index % glowColors.length];
+                    return (
+                      <motion.div
+                        key={track._id}
+                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.07 }}
+                        onClick={() =>
+                          navigate(
+                            `/music/${pathname.split("/")[2]}/${
+                              track.slug || track._id
+                            }`
+                          )
+                        }
+                        className={`
+                          group relative
+                          bg-base-100 rounded-2xl
+                          flex flex-col items-center justify-center
+                          p-4 text-center
+                          cursor-pointer
+                          transition-all duration-300
+                          shadow-md hover:shadow-2xl ${glow}
+                          font-medium hover:font-bold
+                        `}
+                      >
+                        {/* HALO */}
+                        <div
+                          className={`
+                          absolute inset-0 rounded-2xl
+                          opacity-0 group-hover:opacity-100
+                          transition duration-300
+                          blur-xl ${glow}
+                        `}
                         />
-                      </div>
-                      {/* LABEL */}
-                      <span className="text-sm relative z-10">
-                        {track.title}
-                      </span>
-                    </motion.div>
-                  ))}
+                        {/* ICON */}
+                        <div className="w-20 h-20 mb-2 relative z-10">
+                          <img
+                            src={track.coverImage}
+                            alt={track.title}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                        {/* LABEL */}
+                        <span
+                          className="text-xs sm:text-sm
+                          whitespace-nowrap
+                          overflow-hidden
+                          text-ellipsis
+                          relative z-10
+                          max-w-full"
+                        >
+                          {track.title}
+                        </span>
+                      </motion.div>
+                    );
+                  })}
                   <Back />
                 </div>
                 {/* Pagination */}
@@ -238,47 +269,59 @@ const Pages = () => {
                           className="snap-center shrink-0 w-full px-6 mb-8"
                         >
                           <div className="grid grid-cols-2 gap-6">
-                            {pageTracks.map((track) => (
-                              <motion.div
-                                key={track._id}
-                                whileTap={{ scale: 0.95 }}
-                                whileHover={{ scale: 1.07 }}
-                                onClick={() =>
-                                  navigate(`/singles/${track._id}`)
-                                }
-                                className={`
-                  group relative
-                  bg-base-100 rounded-2xl
-                  flex flex-col items-center justify-center
-                  p-4 text-center
-                  cursor-pointer
-                  transition-all duration-300
-                  shadow-md hover:shadow-2xl shadow-gray-500/40
-                  font-medium hover:font-bold
-                `}
-                              >
-                                {/* HALO */}
-                                <div
-                                  className="
-                    absolute inset-0 rounded-2xl
-                    opacity-0 group-hover:opacity-100
-                    transition duration-300
-                    blur-xl shadow-gray-500/40"
-                                />
-                                {/* ICON */}
-                                <div className="w-20 h-20 mb-2 relative z-10">
-                                  <img
-                                    src={track.coverImage}
-                                    alt={track.title}
-                                    className="w-full h-full object-cover rounded-lg"
+                            {pageTracks.map((track, index) => {
+                              const glow =
+                                glowColors[index % glowColors.length];
+                              return (
+                                <motion.div
+                                  key={track._id}
+                                  whileTap={{ scale: 0.95 }}
+                                  whileHover={{ scale: 1.07 }}
+                                  onClick={() =>
+                                    navigate(`/singles/${track._id}`)
+                                  }
+                                  className={`
+                                    group relative
+                                    bg-base-100 rounded-2xl
+                                    flex flex-col items-center justify-center
+                                    p-4 text-center
+                                    cursor-pointer
+                                    transition-all duration-300
+                                    shadow-md hover:shadow-2xl ${glow}
+                                    font-medium hover:font-bold
+                                  `}
+                                >
+                                  {/* HALO */}
+                                  <div
+                                    className={`
+                                    absolute inset-0 rounded-2xl
+                                    opacity-0 group-hover:opacity-100
+                                    transition duration-300
+                                    blur-xl ${glow}
+                                  `}
                                   />
-                                </div>
-                                {/* LABEL */}
-                                <span className="text-sm relative z-10">
-                                  {track.title}
-                                </span>
-                              </motion.div>
-                            ))}
+                                  {/* ICON */}
+                                  <div className="w-20 h-20 mb-2 relative z-10">
+                                    <img
+                                      src={track.coverImage}
+                                      alt={track.title}
+                                      className={`w-full h-full object-cover rounded-lg ${glow}`}
+                                    />
+                                  </div>
+                                  {/* LABEL */}
+                                  <span
+                                    className="text-xs sm:text-sm
+                                    whitespace-nowrap
+                                    overflow-hidden
+                                    text-ellipsis
+                                    relative z-10
+                                    max-w-full"
+                                  >
+                                    {track.title}
+                                  </span>
+                                </motion.div>
+                              );
+                            })}
                             <Back />
                           </div>
                         </div>

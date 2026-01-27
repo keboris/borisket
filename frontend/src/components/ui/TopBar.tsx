@@ -14,7 +14,7 @@ const TopBar = () => {
     <div
       className={`top-0 fixed z-90 left-0 right-0 bg-base-200 ${
         theme === "light" ? "text-black" : "text-white"
-      } flex items-center justify-between px-6 py-2`}
+      } flex items-center justify-between px-6 py-2 border-b border-base-300 shadow-sm`}
     >
       {/* LOGO */}
       <img

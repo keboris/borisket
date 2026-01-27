@@ -6,7 +6,7 @@ import {
   WebSiteLayout,
 } from "./layouts";
 import { Dashboard, Login, NotFound, Register, WebSite } from "./pages";
-import { Music, Pages } from "./components";
+import { Pages, Single } from "./components";
 
 function App() {
   const dashboardRoutes = ["music", "videos"];
@@ -32,9 +32,10 @@ function App() {
             {uiRoutes.map((path) => (
               <Route key={path} path={path} element={<Pages />} />
             ))}
+            <Route path="/music/singles/:slug?" element={<Single />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="/musique" element={<Music />} />
+
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
