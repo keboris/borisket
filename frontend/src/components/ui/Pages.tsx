@@ -31,7 +31,7 @@ const Pages = () => {
 
   const chunk = <T,>(arr: T[], size: number) =>
     Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
-      arr.slice(i * size, i * size + size)
+      arr.slice(i * size, i * size + size),
     );
 
   const handleMobileScroll = () => {
@@ -82,7 +82,7 @@ const Pages = () => {
   const totalPages = Math.ceil(songs.length / PER_PAGE_DESKTOP);
   const desktopTracks = songs.slice(
     (page - 1) * PER_PAGE_DESKTOP,
-    page * PER_PAGE_DESKTOP
+    page * PER_PAGE_DESKTOP,
   );
 
   /* Pages mobile */
@@ -187,7 +187,7 @@ const Pages = () => {
                           navigate(
                             `/music/${pathname.split("/")[2]}/${
                               track.slug || track._id
-                            }`
+                            }`,
                           )
                         }
                         className={`
@@ -278,7 +278,11 @@ const Pages = () => {
                                   whileTap={{ scale: 0.95 }}
                                   whileHover={{ scale: 1.07 }}
                                   onClick={() =>
-                                    navigate(`/singles/${track._id}`)
+                                    navigate(
+                                      `/music/${pathname.split("/")[2]}/${
+                                        track.slug || track._id
+                                      }`,
+                                    )
                                   }
                                   className={`
                                     group relative
