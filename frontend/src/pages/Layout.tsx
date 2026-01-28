@@ -2,10 +2,10 @@ import { Outlet, useLocation, useParams } from "react-router";
 import { MENUPAGES_API_URL, MENUS_API_URL, SONGS_API_URL } from "../config";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Loading, SocialIcons } from "../components";
+import { BreadCrumbs, Loading, SocialIcons } from "../components";
 import type { MenuPageProps, MenuProps, SongProps } from "../types";
 import { useLanguage } from "../contexts";
-import { isMatchPath } from "../lib";
+import { isMatchPath, isShortLink } from "../lib";
 
 const Layout = () => {
   const { pathname } = useLocation();
@@ -13,12 +13,18 @@ const Layout = () => {
   const [time, setTime] = useState(new Date());
 
   const { slug } = useParams();
-  console.log("Current Slug from params:", slug);
 
   const [loading, setLoading] = useState(false);
   const [menus, setMenus] = useState<MenuProps[]>([]);
+  const [allMenus, setAllMenus] = useState<MenuProps[]>([]);
   const [menuPage, setMenuPage] = useState<MenuPageProps | null>(null);
   const [track, setTrack] = useState<SongProps | null>(null);
+
+  // Define pathnameToCheck for use in BreadCrumbs
+  let pathnameToCheck = pathname;
+  if (isShortLink(pathname, "s")) {
+    pathnameToCheck = "/music/singles/" + slug;
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,18 +47,18 @@ const Layout = () => {
           document.title = "Boris Ket - Home";
         } else {
           currentMenuPage = pagesData.find(
-            (page) => page.matchPath === pathname
+            (page) => page.matchPath === pathnameToCheck,
           );
 
           if (!currentMenuPage) {
             const matchedPage = pagesData.find((page) =>
-              isMatchPath(pathname, page.matchPath)
+              isMatchPath(pathnameToCheck, page.matchPath),
             );
             if (matchedPage) {
               currentMenuPage = matchedPage;
-              if (pathname.startsWith("/music/")) {
+              if (pathnameToCheck.startsWith("/music/")) {
                 const songData: SongProps = await fetch(
-                  `${SONGS_API_URL}/slug/${slug}`
+                  `${SONGS_API_URL}/slug/${slug}`,
                 ).then((res) => res.json());
                 currentPage = songData._id ? songData : null;
               }
@@ -86,10 +92,17 @@ const Layout = () => {
         const menusData: MenuProps[] = await menusRes.json();
 
         setMenus(menusData || []);
+
+        // Fetch all menus pour la grille
+        const allMenusRes = await fetch(`${MENUS_API_URL}`);
+        const allMenusData: MenuProps[] = await allMenusRes.json();
+
+        setAllMenus(allMenusData || []);
       } catch (error) {
         console.error("Error fetching menus or pages:", error);
         setTrack(null);
         setMenus([]); // fallback
+        setAllMenus([]); // fallback
         setMenuPage(null);
       } finally {
         setLoading(false);
@@ -119,9 +132,23 @@ const Layout = () => {
 
   if (loading) return <Loading />;
 
+  console.log("Menu Page in Layout:", menuPage);
   return (
     <>
       {/* ================= MOBILE BACKGROUND ================= */}
+      {pathnameToCheck !== "/" && (
+        <>
+          {/* BREADCRUMBS MOBILE */}
+          <div className="md:hidden mb-12">
+            <BreadCrumbs
+              track={track}
+              menus={allMenus}
+              pathnameToCheck={pathnameToCheck}
+            />
+          </div>
+        </>
+      )}
+
       {menuPage && (
         <>
           {slug && track ? (
@@ -144,12 +171,26 @@ const Layout = () => {
       <div className="max-w-7xl mx-auto pt-24 md:pt-28 px-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 relative">
         {/* LEFT */}
         <div className="flex flex-col gap-2">
-          <p className="hidden md:block md:text-5xl font-bold text-center md:text-left">
-            {hour}
-          </p>
-          <p className="hidden md:block opacity-70 capitalize text-center md:text-left">
-            {date}
-          </p>
+          {/* TIME & DATE */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="hidden md:grid md:grid-flow-col md:auto-cols-max md:gap-6 items-center"
+          >
+            <div className="flex flex-col items-start">
+              <p className="md:text-5xl font-bold">{hour}</p>
+              <p className="opacity-70 capitalize">{date}</p>
+            </div>
+
+            <BreadCrumbs
+              track={track}
+              menus={allMenus}
+              pathnameToCheck={pathnameToCheck}
+            />
+          </motion.div>
+
+          {/* PAGE HEADER */}
 
           {menuPage && (
             <div className="relative w-full h-16 md:h-96 rounded-lg mt-2 overflow-hidden md:bg-black text-white bg-none">
@@ -177,12 +218,13 @@ const Layout = () => {
                 <h2 className="text-white text-xl md:text-2xl font-bold drop-shadow-lg">
                   {slug && track
                     ? track.title
-                    : menuPage.title[language] ?? menuPage.title.fr}
+                    : (menuPage.title[language] ?? menuPage.title.fr)}
                 </h2>
                 <p className="mt-1 md:mt-2 text-white text-sm md:text-lg opacity-90 drop-shadow-md max-w-md">
                   {slug && track
                     ? track.artist
-                    : menuPage.description[language] ?? menuPage.description.fr}
+                    : (menuPage.description[language] ??
+                      menuPage.description.fr)}
                 </p>
 
                 {/* Réseaux sociaux */}
@@ -193,6 +235,7 @@ const Layout = () => {
             </div>
           )}
         </div>
+
         {/* RIGHT */}
         <Outlet context={{ menus, track, pathname }} />
 

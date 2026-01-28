@@ -15,3 +15,7 @@ export function isMatchPath(pName: string, matchP: string): boolean {
 
   return pathWithoutId === matchP || pathWithoutId.endsWith(matchP);
 }
+
+export function isShortLink(pathname: string, opt: string): boolean {
+  return pathname.startsWith(`/${opt}/`) && pathname.split("/").length === 3;
+}

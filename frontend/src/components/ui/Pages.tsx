@@ -340,13 +340,13 @@ const Pages = () => {
                         <span
                           key={index}
                           className={`
-          h-2 rounded-full transition-all duration-300
-          ${
-            activeMobilePage === index
-              ? "bg-primary w-5"
-              : "bg-gray-400 dark:bg-gray-600 w-2"
-          }
-        `}
+                            h-2 rounded-full transition-all duration-300
+                            ${
+                              activeMobilePage === index
+                                ? "bg-primary w-5"
+                                : "bg-gray-400 dark:bg-gray-600 w-2"
+                            }
+                          `}
                         />
                       ))}
                   </div>

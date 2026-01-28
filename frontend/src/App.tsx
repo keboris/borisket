@@ -33,6 +33,7 @@ function App() {
               <Route key={path} path={path} element={<Pages />} />
             ))}
             <Route path="/music/singles/:slug?" element={<Single />} />
+            <Route path="/s/:slug?" element={<Single />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 
