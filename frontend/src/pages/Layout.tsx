@@ -6,6 +6,7 @@ import { BreadCrumbs, Loading, SocialIcons } from "../components";
 import type { MenuPageProps, MenuProps, SongProps } from "../types";
 import { useLanguage } from "../contexts";
 import { isMatchPath, isShortLink } from "../lib";
+import * as LucideIcons from "lucide-react";
 
 const Layout = () => {
   const { pathname } = useLocation();
@@ -132,7 +133,11 @@ const Layout = () => {
 
   if (loading) return <Loading />;
 
+  const Icon =
+    (LucideIcons as any)[menuPage?.menuItems?.icon ?? "HelpCircle"] ||
+    LucideIcons.HelpCircle;
   console.log("Menu Page in Layout:", menuPage);
+
   return (
     <>
       {/* ================= MOBILE BACKGROUND ================= */}
@@ -215,6 +220,7 @@ const Layout = () => {
                 transition={{ duration: 1 }}
                 className="relative z-10 flex flex-col items-center justify-center h-full text-center"
               >
+                <Icon className="text-white opacity-90" size={48} />
                 <h2 className="text-white text-xl md:text-2xl font-bold drop-shadow-lg">
                   {slug && track
                     ? track.title

@@ -87,6 +87,7 @@ export type MenuPageProps = {
   image: string;
   menuItems?: {
     _id: string;
+    icon: string;
     name: {
       fr: string;
       en?: string;
