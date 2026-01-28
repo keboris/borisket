@@ -220,7 +220,9 @@ const Layout = () => {
                 transition={{ duration: 1 }}
                 className="relative z-10 flex flex-col items-center justify-center h-full text-center"
               >
-                <Icon className="text-white opacity-90" size={48} />
+                {menuPage?.menuItems?.icon && (
+                  <Icon className="text-white opacity-90" size={48} />
+                )}
                 <h2 className="text-white text-xl md:text-2xl font-bold drop-shadow-lg">
                   {slug && track
                     ? track.title
