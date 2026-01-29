@@ -3,20 +3,20 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useLanguage } from "../../contexts";
 
-const Back = () => {
+const Back = ({ backPath }: { backPath: string }) => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   return (
     <motion.button
       whileTap={{ scale: 0.95 }}
       whileHover={{ scale: 1.07 }}
-      onClick={() => navigate(-1)}
+      onClick={() => navigate(backPath)}
       className="
         group relative
         bg-base-100 rounded-2xl
         flex flex-col items-center justify-center
         p-4 text-center
-        cursor-pointer
+        cursor-pointer w-full
         transition-all duration-300
         shadow-md hover:shadow-2xl shadow-gray-500/40
         font-medium hover:font-bold

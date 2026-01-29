@@ -8,19 +8,11 @@ import {
   FaShareAlt,
   FaPlay,
   FaLink,
+  FaVideo,
+  FaList,
 } from "react-icons/fa";
-import { type JSX } from "react";
-import type { SongProps } from "../../types";
+import type { Platform, SongProps } from "../../types";
 import { useTheme } from "../../contexts";
-
-type Platform = {
-  name: string;
-  url?: string;
-  icon: JSX.Element;
-  bg: string;
-  text: string;
-  border: string;
-};
 
 const Single = () => {
   const { track } = useOutletContext<{
@@ -48,6 +40,8 @@ const Single = () => {
       url: track.links.spotify,
       icon: <FaSpotify size={22} />,
       bg: "bg-[#1DB954]",
+      action: "Écouter",
+      actionIcon: <FaPlay size={14} />,
       text: "text-[#1DB954]",
       border: "#1DB954",
     },
@@ -56,6 +50,8 @@ const Single = () => {
       url: track.links.apple,
       icon: <FaApple size={22} />,
       bg: "bg-black",
+      action: "Écouter",
+      actionIcon: <FaPlay size={14} />,
       text: "text-black",
       border: "#000000",
     },
@@ -64,6 +60,8 @@ const Single = () => {
       url: track.links.youtube,
       icon: <FaYoutube size={22} />,
       bg: "bg-[#FF0000]",
+      action: "Regarder",
+      actionIcon: <FaVideo size={14} />,
       text: "text-[#FF0000]",
       border: "#FF0000",
     },
@@ -72,6 +70,8 @@ const Single = () => {
       url: track.links.deezer,
       icon: <FaDeezer size={22} />,
       bg: "bg-[#A238FF]",
+      action: "Écouter",
+      actionIcon: <FaPlay size={14} />,
       text: "text-[#A238FF]",
       border: "#A238FF",
     },
@@ -80,6 +80,8 @@ const Single = () => {
       url: track.links.other,
       icon: <FaLink size={22} />,
       bg: "bg-[#3B82F6]",
+      action: "Consulter",
+      actionIcon: <FaList size={14} />,
       text: "text-[#3B82F6]",
       border: "#3B82F6",
     },
@@ -179,7 +181,7 @@ const Single = () => {
                           : null;
                       }}
                     >
-                      <FaPlay size={14} /> Écouter
+                      {p.actionIcon} {p.action}
                     </a>
 
                     {/* COPY */}

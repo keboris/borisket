@@ -57,22 +57,42 @@ const BreadCrumbs = ({
     <>
       {/* Breadcrumb icons flottantes sur mobile */}
       <div
-        className="sm:hidden absolute z-50 flex gap-4"
+        className="sm:hidden absolute z-50 flex gap-2"
         style={{ top: "90px", left: "50%", transform: "translateX(-50%)" }}
       >
-        {crumbsToDisplay.map((crumb) => {
+        {crumbsToDisplay.map((crumb, index) => {
           const Icon =
             (LucideIcons as any)[crumb.icon] || LucideIcons.HelpCircle;
+          const isLast = index === crumbsToDisplay.length - 1;
           return (
-            <button
+            <div
               key={crumb._id}
-              onClick={() => navigate(crumb.path)}
-              className={`w-12 h-12 cursor-pointer rounded-full bg-base-100 flex items-center justify-center shadow-md ${crumb.glow}`}
+              className="flex items-center justify-center gap-2"
             >
-              <div className={`${crumb.color}`}>
-                <Icon />
-              </div>
-            </button>
+              <button
+                key={crumb._id}
+                onClick={() => navigate(crumb.path)}
+                className={`w-12 h-12 cursor-pointer rounded-full bg-base-100 flex items-center justify-center shadow-md ${crumb.glow}`}
+              >
+                <div className={`${crumb.color}`}>
+                  <Icon />
+                </div>
+              </button>
+              {/* SEPARATOR LUMINEUX */}
+              {!isLast && (
+                <div
+                  className="
+                    w-3 h-px
+                    bg-gradient-to-r
+                    from-transparent
+                    via-primary
+                    to-transparent
+                    opacity-60
+                    flex-shrink-0
+                    "
+                />
+              )}
+            </div>
           );
         })}
       </div>

@@ -20,6 +20,7 @@ const Layout = () => {
   const [allMenus, setAllMenus] = useState<MenuProps[]>([]);
   const [menuPage, setMenuPage] = useState<MenuPageProps | null>(null);
   const [track, setTrack] = useState<SongProps | null>(null);
+  const [backPath, setBackPath] = useState<string>("/");
 
   // Define pathnameToCheck for use in BreadCrumbs
   let pathnameToCheck = pathname;
@@ -38,13 +39,15 @@ const Layout = () => {
 
         // Déterminer la page actuelle
         let currentMenuPage: MenuPageProps | undefined;
+        let pageId: string | null = null;
         let parentId: string | null = null;
-        let currentPage: SongProps | null = null;
+        let newBackPath: string | null = "/";
+        let trackPage: SongProps | null = null;
         let menuName: string | null = null;
 
         if (pathname === "/") {
           currentMenuPage = pagesData.find((page) => page.matchPath === "/");
-          parentId = null;
+          pageId = null;
           document.title = "Boris Ket - Home";
         } else {
           currentMenuPage = pagesData.find(
@@ -61,35 +64,53 @@ const Layout = () => {
                 const songData: SongProps = await fetch(
                   `${SONGS_API_URL}/slug/${slug}`,
                 ).then((res) => res.json());
-                currentPage = songData._id ? songData : null;
+                trackPage = songData._id ? songData : null;
               }
             }
           }
 
-          parentId = currentMenuPage?.menuItems?._id ?? null;
+          pageId = currentMenuPage?.menuItems?._id ?? null;
 
-          if (currentPage) {
+          if (trackPage) {
             menuName =
-              currentPage.title +
-              (currentPage.feat ? ` ft. ${currentPage.feat}` : "");
+              trackPage.title +
+              (trackPage.feat ? ` ft. ${trackPage.feat}` : "");
+
+            parentId = pageId;
           } else {
             menuName =
               currentMenuPage?.menuItems?.name[language] ??
               currentMenuPage?.menuItems?.name.fr ??
               "Boris Ket";
+
+            parentId = currentMenuPage?.menuItems?.parentId ?? null;
           }
 
           document.title = menuName.includes("Boris Ket")
             ? menuName
             : `${menuName} - Boris Ket`;
         }
+
+        // Déterminer le backPath
+        if (parentId === null) {
+          newBackPath = "/";
+        } else {
+          const parentMenuRes = await fetch(`${MENUS_API_URL}/${parentId}`);
+          const parentMenuData: MenuProps = await parentMenuRes.json();
+          console.log("Fetched parent menu data:", parentMenuData);
+          newBackPath = parentMenuData?.path || "/";
+        }
+
         console.log("Current Menu Page:", currentMenuPage);
-        console.log("Determined parentId:", parentId);
-        setTrack(currentPage || null);
+        console.log("Determined page ID:", pageId);
+        console.log("Determined parent ID:", parentId);
+        console.log("Determined backPath:", newBackPath);
+        setTrack(trackPage || null);
         setMenuPage(currentMenuPage || null);
+        setBackPath(newBackPath || "/");
 
         // Fetch menus pour la grille
-        const menusRes = await fetch(`${MENUS_API_URL}/parent/${parentId}`);
+        const menusRes = await fetch(`${MENUS_API_URL}/parent/${pageId}`);
         const menusData: MenuProps[] = await menusRes.json();
 
         setMenus(menusData || []);
@@ -220,14 +241,35 @@ const Layout = () => {
                 transition={{ duration: 1 }}
                 className="relative z-10 flex flex-col items-center justify-center h-full text-center"
               >
-                {menuPage?.menuItems?.icon && (
-                  <Icon className="text-white opacity-90" size={48} />
-                )}
-                <h2 className="text-white text-xl md:text-2xl font-bold drop-shadow-lg">
-                  {slug && track
-                    ? track.title
-                    : (menuPage.title[language] ?? menuPage.title.fr)}
-                </h2>
+                <div className="flex items-baseline justify-center gap-2">
+                  {menuPage?.menuItems?.icon && (
+                    <>
+                      {slug && track ? (
+                        <img
+                          src={track?.coverImage}
+                          className="w-3.5 h-3.5 md:w-5.5 md:h-5.5 shadow-md shadow-white rounded-full object-cover"
+                          alt={track?.title}
+                        />
+                      ) : (
+                        <Icon
+                          className="
+                      text-white
+                        translate-y-[1px]
+                        w-4 h-4
+                        md:w-6 md:h-6
+                      "
+                          strokeWidth={3}
+                        />
+                      )}
+                    </>
+                  )}
+
+                  <h2 className="text-white text-lg md:text-3xl font-bold leading-none drop-shadow-lg">
+                    {slug && track
+                      ? track.title
+                      : (menuPage.title[language] ?? menuPage.title.fr)}
+                  </h2>
+                </div>
                 <p className="mt-1 md:mt-2 text-white text-sm md:text-lg opacity-90 drop-shadow-md max-w-md">
                   {slug && track
                     ? track.artist
@@ -245,7 +287,7 @@ const Layout = () => {
         </div>
 
         {/* RIGHT */}
-        <Outlet context={{ menus, track, pathname }} />
+        <Outlet context={{ menus, track, pathname, backPath }} />
 
         {/* FOOTER MOBILE SOCIALS */}
         <motion.div

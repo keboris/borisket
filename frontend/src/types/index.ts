@@ -1,3 +1,5 @@
+import type { JSX } from "react/jsx-dev-runtime";
+
 export type Track = {
   id: string;
   title: string;
@@ -88,6 +90,7 @@ export type MenuPageProps = {
   menuItems?: {
     _id: string;
     icon: string;
+    parentId?: string | null;
     name: {
       fr: string;
       en?: string;
@@ -126,4 +129,15 @@ export type SongProps = {
   };
   inPlaylist: boolean;
   buyLink: string;
+};
+
+export type Platform = {
+  name: string;
+  url?: string;
+  icon: JSX.Element;
+  bg: string;
+  action?: string;
+  actionIcon?: JSX.Element;
+  text: string;
+  border: string;
 };

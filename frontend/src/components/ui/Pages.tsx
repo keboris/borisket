@@ -9,11 +9,13 @@ import { SONGS_API_URL } from "../../config";
 import Loading from "./Loading";
 import Back from "./Back";
 import { useClickSound } from "../../lib";
+import * as reactIcons from "react-icons/fa";
 
 const Pages = () => {
-  const { menus, pathname } = useOutletContext<{
+  const { menus, pathname, backPath } = useOutletContext<{
     menus: MenuProps[];
     pathname: string;
+    backPath: string;
   }>();
   const navigate = useNavigate();
   const { language } = useLanguage();
@@ -96,13 +98,22 @@ const Pages = () => {
     "shadow-emerald-500/50",
   ];
 
+  const slugPath = [
+    { check: "/music/singles", path: "/s" },
+    { check: "/music/albums", path: "/a" },
+    { check: "/music/clips", path: "/c" },
+    { check: "/music/lyrics", path: "/l" },
+  ];
+
   console.log("Pathname in Pages component:", pathname);
   return (
     <>
       <div className="grid grid-cols-3 gap-4">
         {menus?.map((item) => {
           const Icon =
-            (LucideIcons as any)[item.icon] || LucideIcons.HelpCircle;
+            (LucideIcons as any)[item.icon] ||
+            (reactIcons as any)[item.icon] ||
+            LucideIcons.HelpCircle;
 
           return (
             <motion.button
@@ -163,7 +174,7 @@ const Pages = () => {
           pathname !== "/music/singles" &&
           pathname !== "/music/albums" &&
           pathname !== "/music/clips" &&
-          pathname !== "/music/lyrics" && <Back />}
+          pathname !== "/music/lyrics" && <Back backPath={backPath} />}
 
         {/* SINGLES */}
         {(pathname === "/music/singles" ||
@@ -183,13 +194,14 @@ const Pages = () => {
                         key={track._id}
                         whileTap={{ scale: 0.95 }}
                         whileHover={{ scale: 1.07 }}
-                        onClick={() =>
-                          navigate(
-                            `/music/${pathname.split("/")[2]}/${
-                              track.slug || track._id
-                            }`,
-                          )
-                        }
+                        onClick={() => {
+                          playClick();
+                          slugPath.forEach(({ check, path }) => {
+                            if (pathname === check) {
+                              navigate(`${path}/${track.slug}`);
+                            }
+                          });
+                        }}
                         className={`
                           group relative
                           bg-base-100 rounded-2xl
@@ -232,7 +244,7 @@ const Pages = () => {
                       </motion.div>
                     );
                   })}
-                  <Back />
+                  <Back backPath={backPath} />
                 </div>
                 {/* Pagination */}
                 {totalPages > 1 && (
@@ -277,13 +289,14 @@ const Pages = () => {
                                   key={track._id}
                                   whileTap={{ scale: 0.95 }}
                                   whileHover={{ scale: 1.07 }}
-                                  onClick={() =>
-                                    navigate(
-                                      `/music/${pathname.split("/")[2]}/${
-                                        track.slug || track._id
-                                      }`,
-                                    )
-                                  }
+                                  onClick={() => {
+                                    playClick();
+                                    slugPath.forEach(({ check, path }) => {
+                                      if (pathname === check) {
+                                        navigate(`${path}/${track.slug}`);
+                                      }
+                                    });
+                                  }}
                                   className={`
                                     group relative
                                     bg-base-100 rounded-2xl
@@ -326,7 +339,17 @@ const Pages = () => {
                                 </motion.div>
                               );
                             })}
-                            <Back />
+
+                            <Back backPath={backPath} />
+                            {/*<div className="grid grid-rows-2 grid-cols-1 h-full w-full">
+                              <div className="flex items-center justify-center">
+                                handleMobileScroll
+                              </div>
+
+                              <div className="flex items-center justify-center">
+                                <Back backPath={backPath} />
+                              </div>
+                            </div>*/}
                           </div>
                         </div>
                       ))}
