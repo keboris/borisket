@@ -2,7 +2,7 @@ import type { MenuProps, SongProps } from "../../types";
 import * as LucideIcons from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
-import { useLanguage } from "../../contexts";
+import { useLanguage, useTheme } from "../../contexts";
 
 const BreadCrumbs = ({
   track,
@@ -14,6 +14,7 @@ const BreadCrumbs = ({
   pathnameToCheck: string;
 }) => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const { language } = useLanguage();
   const pathSegments = pathnameToCheck.split("/").filter(Boolean);
 
@@ -57,13 +58,12 @@ const BreadCrumbs = ({
     <>
       {/* Breadcrumb icons flottantes sur mobile */}
       <div
-        className="sm:hidden absolute z-50 flex gap-2"
-        style={{ top: "90px", left: "50%", transform: "translateX(-50%)" }}
+        className={`sm:hidden w-full absolute z-50 flex items-center justify-center py-0.5 gap-4 border-b ${theme === "light" ? "bg-black/70 border-base-300/30" : "bg-black/30 border-base-300"} shadow-sm`}
+        style={{ top: "58px", left: "50%", transform: "translateX(-50%)" }}
       >
-        {crumbsToDisplay.map((crumb, index) => {
+        {crumbsToDisplay.map((crumb) => {
           const Icon =
             (LucideIcons as any)[crumb.icon] || LucideIcons.HelpCircle;
-          const isLast = index === crumbsToDisplay.length - 1;
           return (
             <div
               key={crumb._id}
@@ -72,26 +72,12 @@ const BreadCrumbs = ({
               <button
                 key={crumb._id}
                 onClick={() => navigate(crumb.path)}
-                className={`w-12 h-12 cursor-pointer rounded-full bg-base-100 flex items-center justify-center shadow-md ${crumb.glow}`}
+                className={`w-12 h-12 cursor-pointer flex items-center justify-center`}
               >
                 <div className={`${crumb.color}`}>
                   <Icon />
                 </div>
               </button>
-              {/* SEPARATOR LUMINEUX */}
-              {!isLast && (
-                <div
-                  className="
-                    w-3 h-px
-                    bg-gradient-to-r
-                    from-transparent
-                    via-primary
-                    to-transparent
-                    opacity-60
-                    flex-shrink-0
-                    "
-                />
-              )}
             </div>
           );
         })}

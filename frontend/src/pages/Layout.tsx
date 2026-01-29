@@ -165,7 +165,7 @@ const Layout = () => {
       {pathnameToCheck !== "/" && (
         <>
           {/* BREADCRUMBS MOBILE */}
-          <div className="md:hidden mb-12">
+          <div className="md:hidden">
             <BreadCrumbs
               track={track}
               menus={allMenus}
@@ -219,7 +219,7 @@ const Layout = () => {
           {/* PAGE HEADER */}
 
           {menuPage && (
-            <div className="relative w-full h-16 md:h-96 rounded-lg mt-2 overflow-hidden md:bg-black text-white bg-none">
+            <div className="relative w-full h-16 md:h-96 rounded-lg mt-4 sm:mt-2 overflow-hidden md:bg-black text-white bg-none">
               {/* Desktop image */}
               {slug && track ? (
                 <img
